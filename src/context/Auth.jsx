@@ -19,11 +19,13 @@ function Auth(props) {
     signInWithRedirect(getAuth(app), new GoogleAuthProvider());
   };
   const logOut = async () => {
-    signOut(getAuth(app));
+    await signOut(getAuth(app), () => console.log("done"));
+    setUserData(null);
+    window.location.reload();
   };
 
   return (
-    <AuthContext.Provider value={[userData, signIn, logOut]}>
+    <AuthContext.Provider value={{ userData, signIn, logOut }}>
       {props.children}
     </AuthContext.Provider>
   );

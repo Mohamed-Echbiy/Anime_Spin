@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Character from "./Character";
+import Anime from "./Anime";
 import { data } from "../assets/data.json";
 
 let dataArray = data;
@@ -16,7 +16,7 @@ function Vote() {
   getRandom();
   return (
     <div class="hero relative min-h-screen w-full flex flex-wrap items-center justify-center gap-5 px-3">
-      <Character data={dataArray[index()]} />
+      <Anime data={dataArray[index()]} />
       <div id="spin" class="w-full flex items-center justify-center">
         <button class="btn btn-warning" onclick={getRandom}>
           shuffle

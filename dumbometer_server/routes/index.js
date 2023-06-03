@@ -1,14 +1,14 @@
 const express = require("express");
-const { addDumb, minusDumb } = require("../controller/controller");
+const { addToFavorite, getFavorites } = require("../controller/controller");
 
 //
 
 const router = express.Router();
 
 //
-
-router.post("/api/vote_dumb/:id", addDumb);
-router.post("/api/vote_smart/:id", minusDumb);
+router.get("/api/:id", getFavorites);
+router.patch("/api/add/:id", addToFavorite);
+router.delete("/api/remove/:id");
 
 //
 

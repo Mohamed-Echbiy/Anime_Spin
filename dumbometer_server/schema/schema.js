@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const schema = new mongoose.Schema(
   {
     id: {
-      type: Number,
+      type: String,
       required: [true, "please make sure you pass the mal_id"],
     },
-    vote_dumb: {
-      type: Number,
-      default: 0,
+    favorites: {
+      type: [String],
+      default: [],
     },
   },
   { timestamps: true }

@@ -1,55 +1,56 @@
-const db = require('../schema/schema.js');
+const db = require("../schema/schema.js");
 
-const addDumb = async (req, res) => {
-  const { id } = req.params;
-  console.log(id, 'params');
-  try {
-    const findInDb = await db.findOne({ id });
-    let createCharacter;
-    if (!findInDb) {
-      createCharacter = await db.create({ id });
-      console.log(createCharacter);
-    } else {
-      createCharacter = findInDb;
-    }
-    const updateVote = await db.updateOne(
-      { id },
-      {
-        vote_dumb: createCharacter.vote_dumb + 1,
-      }
-    );
-
-    console.log(updateVote);
-    return res.status(200).json({ message: 'added' });
-  } catch (error) {
-    console.log(error.message);
+const addToFavorite = async (req, res) => {
+  const { id } = req.params; // user Id
+  if (!!!id || id === "undefined") {
+    return res.status(401).json({ message: "please provide the user id " });
   }
-};
-//==================================================================//
-//------------------------------------------------------------------//
-//==================================================================//
-const minusDumb = async (req, res) => {
-  const { id } = req.params;
+  const { animeId } = req.query;
+
   try {
-    const findInDb = await db.findOne({ id });
-    let createCharacter;
-    if (!findInDb) {
-      createCharacter = await db.create({ id });
-      console.log(createCharacter);
-    } else {
-      createCharacter = findInDb;
+    let findInDb = await db.findOne({ id });
+
+    if (!!!findInDb) {
+      const createUser = await db.create({ id });
+      findInDb = createUser;
     }
-    const updateVote = await db.updateOne(
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    const update = await db.updateOne(
       { id },
-      {
-        vote_dumb: createCharacter.vote_dumb - 1,
-      }
+      { favorites: [...findInDb.favorites, animeId] }
     );
-    console.log(updateVote);
-    return res.status(200).json({ message: 'added' });
+
+    return res.status(200).json({ message: "added", update });
   } catch (error) {
     console.log(error.message);
+    return res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { addDumb, minusDumb };
+const getFavorites = async (req, res) => {
+  const id = req.params.id;
+  if (!!!id || id === "undefined") {
+    return res.status(401).json({ message: "please provide the user id " });
+  }
+  console.log(id);
+  try {
+    let getFavorites = await db.findOne({ id });
+    console.log("first log: ", getFavorites);
+    if (!!!getFavorites) {
+      const createUser = await db.create({ id });
+      console.log("user: ", createUser);
+      getFavorites = createUser;
+    }
+    console.log("second log: ", getFavorites);
+    return res.status(200).json({ data: getFavorites });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error.message });
+  }
+};
+
+module.exports = { addToFavorite, getFavorites };
