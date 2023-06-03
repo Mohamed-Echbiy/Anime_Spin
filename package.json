@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@tanstack/solid-query": "^4.29.11",
+    "firebase": "^9.22.1",
+    "solid-firebase": "^0.1.8",
     "solid-icons": "^1.0.7",
     "solid-js": "^1.6.10"
   }
