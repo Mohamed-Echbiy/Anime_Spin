@@ -2,7 +2,7 @@ const fs = require("fs");
 
 async function fetchData() {
   const response = await fetch(
-    "https://api.jikan.moe/v4/top/characters?page=1"
+    "https://api.consumet.org/meta/anilist/popular?page=5&perPage=50"
   );
   const data = await response.json();
 
@@ -11,7 +11,7 @@ async function fetchData() {
   console.log("------------");
 
   const response1 = await fetch(
-    "https://api.jikan.moe/v4/top/characters?page=2"
+    "https://api.consumet.org/meta/anilist/popular?page=6&perPage=50"
   );
   const data1 = await response1.json();
 
@@ -20,7 +20,7 @@ async function fetchData() {
   console.log("------------");
 
   const response2 = await fetch(
-    "https://api.jikan.moe/v4/top/characters?page=3"
+    "https://api.consumet.org/meta/anilist/popular?page=7&perPage=50"
   );
   const data2 = await response2.json();
 
@@ -29,7 +29,7 @@ async function fetchData() {
   console.log("------------");
 
   const response3 = await fetch(
-    "https://api.jikan.moe/v4/top/characters?page=4"
+    "https://api.consumet.org/meta/anilist/popular?page=8&perPage=50"
   );
   const data3 = await response3.json();
   console.log("------------");
@@ -37,9 +37,14 @@ async function fetchData() {
   console.log("------------");
 
   const fullData = JSON.stringify({
-    data: [...data.data, ...data1.data, ...data2.data],
+    data: [
+      ...data.results,
+      ...data1.results,
+      ...data2.results,
+      ...data3.results,
+    ],
   });
-  fs.writeFile("data.json", fullData, (err) => {
+  fs.writeFile("./assets/data1.json", fullData, (err) => {
     if (err) {
       console.error(err);
     } else {
