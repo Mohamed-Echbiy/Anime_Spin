@@ -41,8 +41,8 @@ Please ensure that you have the required dependencies, such as Node.js installed
 
 ---
 
-![Project Screenshot 1](./src/asset/screenshot1.png)
+![Project Screenshot 1](./src/assets/screenshot1.png)
 
-![Project Screenshot 2](./src/asset/screenshot2.png)
+![Project Screenshot 2](./src/assets/screenshot2.png)
 
-![Project Screenshot 3](./src/asset/screenshot3.png)
+![Project Screenshot 3](./src/assets/screenshot3.png)
