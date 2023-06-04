@@ -1,7 +1,7 @@
 export default function AiFillHeart(props) {
   return (
     <svg
-      class="text-red-600 cursor-pointer "
+      class={`text-red-600 cursor-pointer ${props.class}`}
       fill="currentColor"
       stroke-width="0"
       xmlns="http://www.w3.org/2000/svg"

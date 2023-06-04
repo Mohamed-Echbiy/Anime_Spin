@@ -11,9 +11,11 @@ import {
   createSignal,
 } from "solid-js";
 import { useAuthContext } from "../context/Auth";
+import { useDataContext } from "../context/Data";
 
 function Anime(props) {
   const { userData } = useAuthContext();
+  const { setData, reflectUpdate } = useDataContext();
   const [fill, setFill] = createSignal(true);
 
   /////////////////// Data Fetching //////////////////////
@@ -23,6 +25,7 @@ function Anime(props) {
       let id = userData().id;
       const response = await fetch(`http://localhost:8000/api/${id}`);
       const data = await response.json();
+      setData(data.data);
       return data.data;
     } else {
       return null;
@@ -35,6 +38,7 @@ function Anime(props) {
   /////////////////// perform Action related to the Fetched Data ///////////////////
 
   function add() {
+    console.log("add run");
     setFill((pre) => !pre);
     fetch(
       `http://localhost:8000/api/add/${userData().id}?animeId=${props.data.id}`,
@@ -46,12 +50,14 @@ function Anime(props) {
         },
       }
     )
-      .then((res) => console.log(res.json()))
+      .then((res) => res.json())
+      .then(() => reflectUpdate("add", props.data.id))
       .then(() => refetch())
       .catch((err) => console.log(err.message));
   }
 
   function remove() {
+    console.log("we run");
     setFill((pre) => !pre);
     fetch(
       `http://localhost:8000/api/remove/${userData().id}?animeId=${
@@ -65,17 +71,18 @@ function Anime(props) {
         },
       }
     )
-      .then((res) => console.log(res))
+      .then((res) => res.json())
       .then(() => refetch())
       .catch((err) => console.log(err.message));
+    reflectUpdate("remove", props.data.id);
   }
 
   ////////////////////////////////////////////////////////////////////////////////
 
   createEffect(() => {
+    console.log(!!!props.favorite && fill());
     if (userData()) {
       if (!!data()) {
-        console.log(data());
         if (data().favorites.includes(props.data.id)) {
           setFill(false);
         }
@@ -83,49 +90,74 @@ function Anime(props) {
     }
   });
   return (
-    <section class="card max-w-2xl relative sm:card-side bg-base-100 flex-grow w-full shadow-xl ">
-      <div class="absolute top-2 right-2 ">
-        <Show when={!!userData}>
-          <Switch>
-            <Match when={fill()}>
-              <div onclick={() => add()}>
-                <OutlineHeart />
-              </div>
-            </Match>
-            <Match when={!fill()}>
-              <FillHeart onclick={() => } />
-            </Match>
-          </Switch>
-        </Show>
-      </div>
-      <figure class="min-w-[250px] w-[250px] mx-auto aspect-[.7] relative">
+    <section
+      class={`relative ${
+        !!!props.favorite ? "card" : " max-w-[520px]"
+      } sm:card-side bg-base-100 shadow-2xl`}
+    >
+      <figure
+        class={`${
+          !!props.favorite
+            ? "min-w-[290px] w-[290px]"
+            : "min-w-[250px] w-[250px]"
+        } mx-auto aspect-[.7] relative`}
+      >
         <img
           src={props.data.image}
           class="object-cover absolute top-0 left-0 w-full h-full"
           alt={props.data.title.english}
         />
       </figure>
-      <div class=" p-4   flex flex-col justify-between">
+      <div class="p-4 flex flex-col justify-between">
         <div class="card-info ">
           <p class="text-xs mb-4 flex items-center gap-2">
             <span>{props.data.type}</span>
             <FiTv />
           </p>
-          <h2 class="mb-4 text-base text-secondary md:text-lg lg:text-xl">
+          <h2
+            class={`mb-4 text-base text-secondary md:text-lg lg:text-xl text-ellipsis ${
+              !!props.favorite ? "max-w-[270px]" : "max-w-[300px]"
+            } whitespace-nowrap overflow-hidden`}
+            title={props.data.title.english}
+          >
             {props.data.title.english}
           </h2>
-          <h3 class=" mb-4 text-sm">{props.data.title.native}</h3>
+          <h3
+            class={`mb-4 text-sm  text-ellipsis ${
+              !!props.favorite ? "max-w-[270px]" : "max-w-[300px]"
+            } whitespace-nowrap overflow-hidden`}
+            title={props.data.title.native}
+          >
+            {props.data.title.native}
+          </h3>
           <div class="anime-details text-xs flex items-center gap-4 flex-wrap">
             <p class="duration">{props.data.duration} min</p>
             <p class="duration flex items-center gap-[2px]">
               <span>{(props.data.rating / 10).toPrecision(2)}</span> <FiStar />
             </p>
+
             <p class="duration">{props.data.status} </p>
+            <div class=" ">
+              <Show when={!!userData}>
+                <Switch>
+                  <Match when={fill()}>
+                    <div onclick={() => add()}>
+                      <OutlineHeart />
+                    </div>
+                  </Match>
+                  <Match when={!fill()}>
+                    <div onclick={() => remove()}>
+                      <FillHeart />
+                    </div>
+                  </Match>
+                </Switch>
+              </Show>
+            </div>
           </div>
-          <p class="pt-2 text-xs">description: </p>
+          {/* <p class="pt-2 text-xs">description: </p>
           <p class="text-sm max-h-[160px]  mt-2 overflow-scroll">
             {props.data.description}
-          </p>
+          </p> */}
         </div>
       </div>
     </section>
