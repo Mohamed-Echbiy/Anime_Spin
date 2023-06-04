@@ -93,7 +93,7 @@ function Anime(props) {
               </div>
             </Match>
             <Match when={!fill()}>
-              <FillHeart onclick={() => console.log("remove")} />
+              <FillHeart onclick={() => } />
             </Match>
           </Switch>
         </Show>
