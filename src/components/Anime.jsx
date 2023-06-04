@@ -12,6 +12,7 @@ import {
 } from "solid-js";
 import { useAuthContext } from "../context/Auth";
 import { useDataContext } from "../context/Data";
+import { effect } from "solid-js/web";
 
 function Anime(props) {
   const { userData } = useAuthContext();
@@ -80,12 +81,11 @@ function Anime(props) {
   ////////////////////////////////////////////////////////////////////////////////
 
   createEffect(() => {
-    console.log(!!!props.favorite && fill());
-    if (userData()) {
-      if (!!data()) {
-        if (data().favorites.includes(props.data.id)) {
-          setFill(false);
-        }
+    if (userData() && !!data()) {
+      if (data().favorites.includes(props.data.id)) {
+        setFill(false);
+      } else {
+        setFill(true);
       }
     }
   });

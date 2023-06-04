@@ -1,4 +1,5 @@
 import FillHeart from "./Icons/FillHearth";
+import Github from "./Icons/Github";
 import Solidjs from "./Icons/Solidjs";
 function Footer() {
   return (
@@ -14,7 +15,10 @@ function Footer() {
         </p>
       </div>
       <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-        <a href=""></a>
+        <span>give me a star :\)</span>
+        <a href="https://github.com/Mohamed-Echbiy/Anime_Spin" target="_blank">
+          <Github />
+        </a>
       </div>
     </footer>
   );

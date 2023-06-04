@@ -5,9 +5,6 @@ import FillHeart from "./Icons/FillHearth";
 
 function Favorites() {
   const { favorite } = useDataContext();
-  createEffect(() => {
-    console.log(favorite(), "favorite");
-  });
   return (
     <main class="hero min-h-screen flex items-center flex-col justify-center mb-16">
       <h1 class="text-4xl flex items-center gap-2 mb-16">
