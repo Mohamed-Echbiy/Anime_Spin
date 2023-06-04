@@ -13,7 +13,6 @@ function App() {
         <div class="">
           <Home />
           <Vote />
-
           <Favorites />
         </div>
         <Footer />

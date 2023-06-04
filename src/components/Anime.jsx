@@ -12,7 +12,6 @@ import {
 } from "solid-js";
 import { useAuthContext } from "../context/Auth";
 import { useDataContext } from "../context/Data";
-import { effect } from "solid-js/web";
 
 function Anime(props) {
   const { userData } = useAuthContext();
@@ -138,7 +137,7 @@ function Anime(props) {
 
             <p class="duration">{props.data.status} </p>
             <div class=" ">
-              <Show when={!!userData}>
+              <Show when={!!userData()}>
                 <Switch>
                   <Match when={fill()}>
                     <div onclick={() => add()}>
@@ -154,10 +153,6 @@ function Anime(props) {
               </Show>
             </div>
           </div>
-          {/* <p class="pt-2 text-xs">description: </p>
-          <p class="text-sm max-h-[160px]  mt-2 overflow-scroll">
-            {props.data.description}
-          </p> */}
         </div>
       </div>
     </section>
