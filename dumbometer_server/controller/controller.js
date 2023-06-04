@@ -16,7 +16,11 @@ const addToFavorite = async (req, res) => {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-
+    if (findInDb.favorites.includes(animeId)) {
+      return res.status(401).json({
+        message: "the anime is already marked as favorite",
+      });
+    }
     ///////////////////////////////////////////////////////////////////////////
 
     const update = await db.updateOne(
@@ -30,7 +34,7 @@ const addToFavorite = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
+///////////////////////////
 const getFavorites = async (req, res) => {
   const id = req.params.id;
   if (!!!id || id === "undefined") {
@@ -52,5 +56,43 @@ const getFavorites = async (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 };
+////////////////////////////
 
-module.exports = { addToFavorite, getFavorites };
+const removeFavorite = async (req, res) => {
+  const { id } = req.params; // user Id
+  if (!!!id || id === "undefined") {
+    return res.status(401).json({ message: "please provide the user id " });
+  }
+  const { animeId } = req.query;
+
+  try {
+    let findInDb = await db.findOne({ id });
+
+    if (!!!findInDb) {
+      const createUser = await db.create({ id });
+      findInDb = createUser;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    if (findInDb.favorites.includes(animeId)) {
+      const updateFavorite = findInDb.favorites.filter(
+        (anime) => anime !== animeId
+      );
+      const update = await db.updateOne(
+        { id },
+        { favorites: [...updateFavorite] }
+      );
+      return res.status(200).json({ message: "added", update });
+    } else {
+      return res
+        .status(401)
+        .json({ message: "the anime is not added to favorite to be deleted" });
+    }
+    ///////////////////////////////////////////////////////////////////////////
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { addToFavorite, getFavorites, removeFavorite };
