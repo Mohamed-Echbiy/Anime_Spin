@@ -15,9 +15,12 @@ function Vote() {
   }
   getRandom();
   return (
-    <div class="hero relative min-h-screen w-full flex flex-wrap items-center justify-center gap-5 px-3">
+    <div
+      id="spin"
+      class="hero relative min-h-screen w-full flex flex-wrap items-center justify-center gap-5 px-3"
+    >
       <Anime data={dataArray[index()]} />
-      <div id="spin" class="w-full flex items-center justify-center">
+      <div class="w-full flex items-center justify-center">
         <button class="btn btn-warning" onclick={getRandom}>
           shuffle
         </button>
